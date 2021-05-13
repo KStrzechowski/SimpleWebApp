@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Task1.Models.Samochod>
+
+@{
+    ViewData["Title"] = "Samochody";
+}
+
+<h1>Samochody</h1>
+
+<p>
+    <a asp-action="Create">Dodaj nowy samochód</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Pojemnosc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cena)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pojemnosc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cena)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SamochodId">Edytuj</a> |
+                <a asp-action="Details" asp-route-id="@item.SamochodId">Detale</a> |
+                <a asp-action="Delete" asp-route-id="@item.SamochodId">Usuń</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

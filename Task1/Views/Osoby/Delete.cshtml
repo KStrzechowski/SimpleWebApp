@@ -1,0 +1,45 @@
+﻿@model Task1.Models.Osoba
+
+@{
+    ViewData["Title"] = "Usuń";
+}
+
+<h1>Usuń</h1>
+
+<h3>Czy jesteś pewien, że chcesz usunąć tę osobę</h3>
+<div>
+    <h4>Osoba</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Imie)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Imie)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Nazwisko)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Nazwisko)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DataProd)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DataProd)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Samochod)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Samochod.SamochodId)
+        </dd class>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="OsobaId" />
+        <input type="submit" value="Usuń" class="btn btn-danger" /> |
+        <a asp-action="Index">Wróć do listy</a>
+    </form>
+</div>

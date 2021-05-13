@@ -1,0 +1,36 @@
+﻿@model Task1.Models.Samochod
+
+@{
+    ViewData["Title"] = "Detale";
+}
+
+<h1>Detale</h1>
+
+<div>
+    <h4>Samochód</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SamochodId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SamochodId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Pojemnosc)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Pojemnosc)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Cena)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Cena)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.SamochodId">Edytuj</a> |
+    <a asp-action="Index">Wróć do listy</a>
+</div>

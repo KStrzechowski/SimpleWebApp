@@ -1,0 +1,48 @@
+﻿@model Task1.Models.Osoba
+
+@{
+    ViewData["Title"] = "Detale";
+}
+
+<h1>Detale</h1>
+
+<div>
+    <h4>Osoba</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.OsobaId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.OsobaId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Imie)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Imie)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nazwisko)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nazwisko)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Samochod)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Samochod.SamochodId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DataProd)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DataProd)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.OsobaId">Edytuj</a> |
+    <a asp-action="Index">Wróć do listy</a>
+</div>
