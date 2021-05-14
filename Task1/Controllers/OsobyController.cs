@@ -25,6 +25,20 @@ namespace Task1.Controllers
             return View(await task1Context.ToListAsync());
         }
 
+        // GET: Osoby/Search
+        public async Task<IActionResult> Search()
+        {
+            var task1Context = _context.Osoby.Include(o => o.Samochod);
+            return View();
+        }
+
+        // POST: Osoby/ShowSearchResults
+        public async Task<IActionResult> ShowSearchResults(string SearchPhrase)
+        {
+            var task1Context = _context.Osoby.Include(o => o.Samochod);
+            return View("Index", await _context.Osoby.Where( x => (x.Nazwisko.Contains(SearchPhrase) /*|| x.DataProd == Convert.ToDateTime(SearchPhrase)*/)).ToListAsync());
+        }
+
         // GET: Osoby/Details/5
         public async Task<IActionResult> Details(int? id)
         {
