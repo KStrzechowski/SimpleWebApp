@@ -14,16 +14,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Imie)
+                @Html.ActionLink("Imię", "Index", new { sortOrder = ViewBag.FirstNameSortParm })
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nazwisko)
+                @Html.ActionLink("Nazwisko", "Index", new { sortOrder = ViewBag.LastNameSortParm })
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DataProd)
+                @Html.ActionLink("Data Produkcji", "Index", new { sortOrder = ViewBag.DateSortParm })
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Samochod)
+                @Html.ActionLink("ID Samochodu", "Index", new { sortOrder = ViewBag.SamochodIdSortParm })
             </th>
             <th></th>
         </tr>
@@ -38,7 +38,11 @@
                 @Html.DisplayFor(modelItem => item.Nazwisko)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DataProd)
+                @{
+                    #nullable enable
+                    string? parameterValue = item.DataProd != null ? item.DataProd.Value.ToShortDateString() : null;
+                }
+                @Html.DisplayFor(modelItem => parameterValue)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Samochod.SamochodId)

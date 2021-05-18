@@ -19,24 +19,50 @@ namespace Task1.Controllers
         }
 
         // GET: Osoby
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            var task1Context = _context.Osoby.Include(o => o.Samochod);
-            return View(await task1Context.ToListAsync());
+            ViewBag.FirstNameSortParm = sortOrder == "Imie" ? "Imie_desc" : "Imie";
+            ViewBag.LastNameSortParm = sortOrder == "Nazwisko" ? "Nazwisko_desc" : "Nazwisko";
+            ViewBag.DateSortParm = sortOrder == "DataProd" ? "DataProd_desc" : "DataProd";
+            ViewBag.SamochodIdSortParm = sortOrder == "SamochodId" ? "SamochodId_desc" : "SamochodId";
+
+            var Osoby = from os in _context.Osoby.Include(o => o.Samochod)
+                        select os;
+            Osoby = sortOrder switch
+            {
+                "Imie" => Osoby.OrderBy(os => os.Imie),
+                "Imie_desc" => Osoby.OrderByDescending(os => os.Imie),
+                "Nazwisko" => Osoby.OrderBy(os => os.Nazwisko),
+                "Nazwisko_desc" => Osoby.OrderByDescending(os => os.Nazwisko),
+                "DataProd" => Osoby.OrderBy(os => os.DataProd),
+                "DataProd_desc" => Osoby.OrderByDescending(os => os.DataProd),
+                "SamochodId" => Osoby.OrderBy(os => os.SamochodId),
+                "SamochodId_desc" => Osoby.OrderByDescending(os => os.SamochodId),
+                _ => Osoby.OrderBy(os => os.OsobaId),
+            };
+            return View(await Osoby.ToListAsync());
         }
 
         // GET: Osoby/Search
-        public async Task<IActionResult> Search()
+        public IActionResult Search()
         {
             var task1Context = _context.Osoby.Include(o => o.Samochod);
             return View();
         }
 
         // POST: Osoby/ShowSearchResults
-        public async Task<IActionResult> ShowSearchResults(string SearchPhrase)
+        public async Task<IActionResult> ShowSearchResults(string SearchPhrase, int ItemType)
         {
             var task1Context = _context.Osoby.Include(o => o.Samochod);
-            return View("Index", await _context.Osoby.Where( x => (x.Nazwisko.Contains(SearchPhrase) /*|| x.DataProd == Convert.ToDateTime(SearchPhrase)*/)).ToListAsync());
+            if (ItemType == 1)
+            {
+                return View("Index", await _context.Osoby.Where(x => x.Nazwisko.Contains(SearchPhrase)).ToListAsync());
+            }
+            else
+            {
+                DateTime productionTime = Convert.ToDateTime(SearchPhrase);
+                return View("Index", await _context.Osoby.Where(x => x.DataProd == productionTime).ToListAsync());
+            }
         }
 
         // GET: Osoby/Details/5

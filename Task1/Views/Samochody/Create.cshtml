@@ -13,17 +13,12 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="SamochodId" class="control-label"></label>
-                <input asp-for="SamochodId" class="form-control" />
-                <span asp-validation-for="SamochodId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Pojemnosc" class="control-label"></label>
+                <label asp-for="Pojemnosc" class="control-label">Pojemność</label>
                 <input asp-for="Pojemnosc" class="form-control" />
                 <span asp-validation-for="Pojemnosc" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Cena" class="control-label"></label>
+                <label asp-for="Cena" class="control-label">Cena</label>
                 <input asp-for="Cena" class="form-control" />
                 <span asp-validation-for="Cena" class="text-danger"></span>
             </div>

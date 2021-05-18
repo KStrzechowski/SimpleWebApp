@@ -11,30 +11,30 @@
     <h4>Osoba</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Imie)
+        <dt class="col-sm-2">
+            @Html.DisplayName("Imię")
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Imie)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nazwisko)
+        <dt class="col-sm-2">
+            @Html.DisplayName("Nazwisko")
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Nazwisko)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DataProd)
+        <dt class="col-sm-2">
+            @Html.DisplayName("ID Samochodu")
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Samochod.SamochodId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayName("Data Produkcji")
+        </dt>
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DataProd)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Samochod)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Samochod.SamochodId)
-        </dd class>
     </dl>
     
     <form asp-action="Delete">
