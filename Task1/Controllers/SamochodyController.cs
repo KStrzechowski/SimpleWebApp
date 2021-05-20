@@ -29,14 +29,14 @@ namespace Task1.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             var samochod = await _context.Samochody
                 .FirstOrDefaultAsync(m => m.SamochodId == id);
             if (samochod == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return View(samochod);
@@ -55,6 +55,13 @@ namespace Task1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SamochodId,Pojemnosc,Cena")] Samochod samochod)
         {
+            Random rand = new Random(Guid.NewGuid().GetHashCode());
+            int id = rand.Next(Math.Abs(Guid.NewGuid().GetHashCode()));
+            while (_context.Samochody.Any(x => x.SamochodId == id))
+            {
+                id = rand.Next(Math.Abs(Guid.NewGuid().GetHashCode()));
+            }
+            samochod.SamochodId = id;
             if (ModelState.IsValid)
             {
                 _context.Add(samochod);
@@ -69,13 +76,13 @@ namespace Task1.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             var samochod = await _context.Samochody.FindAsync(id);
             if (samochod == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
             return View(samochod);
         }
@@ -89,7 +96,7 @@ namespace Task1.Controllers
         {
             if (id != samochod.SamochodId)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             if (ModelState.IsValid)
@@ -103,7 +110,7 @@ namespace Task1.Controllers
                 {
                     if (!SamochodExists(samochod.SamochodId))
                     {
-                        return NotFound();
+                        return View("NotFound");
                     }
                     else
                     {
@@ -120,14 +127,14 @@ namespace Task1.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             var samochod = await _context.Samochody
                 .FirstOrDefaultAsync(m => m.SamochodId == id);
             if (samochod == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return View(samochod);
@@ -138,6 +145,11 @@ namespace Task1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!SamochodExists(id))
+                return View("NotFound");
+            if (_context.Osoby.Any(x => x.SamochodId == id))
+                return View("CantDelete");
+
             var samochod = await _context.Samochody.FindAsync(id);
             _context.Samochody.Remove(samochod);
             await _context.SaveChangesAsync();

@@ -6,15 +6,16 @@
     <div class="col-md-4">
         <form asp-action="ShowSearchResults">
             <div class="form-group">
-                <label class="control-label">Czego szukasz?</label>
-                <select for="ItemType" name="ItemType">
-                    <option value="1">Nazwiska</option>
-                    <option value="2">Daty Produkcji</option>
-                </select>
+                <label for="SearchLastName" class="control-label">Nazwisko</label>
+                <input name="SearchLastName" class="form-control" />
             </div>
             <div class="form-group">
-                <label for="SearchPhrase" class="control-label"></label>
-                <input name="SearchPhrase" class="form-control" />
+                <label for="SearchDateFrom" class="control-label">Data od:</label>
+                <input name="SearchDateFrom" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="SearchDateTo" class="control-label">Data do</label>
+                <input name="SearchDateTo" class="form-control" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Szukaj" class="btn btn-primary" />
@@ -27,3 +28,6 @@
     <a asp-action="Index">Wróć do listy</a>
 </div>
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

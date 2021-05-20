@@ -38,7 +38,7 @@ namespace Task1.Controllers
                 "DataProd_desc" => Osoby.OrderByDescending(os => os.DataProd),
                 "SamochodId" => Osoby.OrderBy(os => os.SamochodId),
                 "SamochodId_desc" => Osoby.OrderByDescending(os => os.SamochodId),
-                _ => Osoby.OrderBy(os => os.OsobaId),
+                _ => Osoby.OrderBy(os => os.Nazwisko),
             };
             return View(await Osoby.ToListAsync());
         }
@@ -51,18 +51,29 @@ namespace Task1.Controllers
         }
 
         // POST: Osoby/ShowSearchResults
-        public async Task<IActionResult> ShowSearchResults(string SearchPhrase, int ItemType)
+        public async Task<IActionResult> ShowSearchResults(string SearchLastName, DateTime? SearchDateFrom, DateTime? SearchDateTo)
         {
             var task1Context = _context.Osoby.Include(o => o.Samochod);
-            if (ItemType == 1)
+            int check = 0;
+            if (SearchLastName != null)
+                check += 1;
+            if (SearchDateFrom != null)
+                check += 2;
+            if (SearchDateTo != null)
+                check += 4;
+
+            return check switch
             {
-                return View("Index", await _context.Osoby.Where(x => x.Nazwisko.Contains(SearchPhrase)).ToListAsync());
-            }
-            else
-            {
-                DateTime productionTime = Convert.ToDateTime(SearchPhrase);
-                return View("Index", await _context.Osoby.Where(x => x.DataProd == productionTime).ToListAsync());
-            }
+                1 => View("Index", await task1Context.Where(x => x.Nazwisko.Contains(SearchLastName)).ToListAsync()),
+                2 => View("Index", await task1Context.Where(x => x.DataProd >= SearchDateFrom).ToListAsync()),
+                3 => View("Index", await task1Context.Where(x => x.Nazwisko.Contains(SearchLastName) && x.DataProd >= SearchDateFrom).ToListAsync()),
+                4 => View("Index", await task1Context.Where(x => x.DataProd <= SearchDateTo).ToListAsync()),
+                5 => View("Index", await task1Context.Where(x => x.Nazwisko.Contains(SearchLastName) && x.DataProd <= SearchDateTo).ToListAsync()),
+                6 => View("Index", await task1Context.Where(x => x.DataProd >= SearchDateFrom && x.DataProd <= SearchDateTo).ToListAsync()),
+                7 => View("Index", await task1Context.Where(x => x.Nazwisko.Contains(SearchLastName) && x.DataProd >= SearchDateFrom 
+                                                            && x.DataProd <= SearchDateTo).ToListAsync()),
+                _ => View("NotFound"),
+            };
         }
 
         // GET: Osoby/Details/5
@@ -70,7 +81,7 @@ namespace Task1.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             var osoba = await _context.Osoby
@@ -78,7 +89,7 @@ namespace Task1.Controllers
                 .FirstOrDefaultAsync(m => m.OsobaId == id);
             if (osoba == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return View(osoba);
@@ -98,6 +109,14 @@ namespace Task1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("OsobaId,Imie,Nazwisko,SamochodId,DataProd")] Osoba osoba)
         {
+            Random rand = new Random(Guid.NewGuid().GetHashCode());
+            int id = rand.Next(Math.Abs(Guid.NewGuid().GetHashCode()));
+            while (_context.Osoby.Any(x => x.OsobaId == id))
+            {
+                id = rand.Next(Math.Abs(Guid.NewGuid().GetHashCode()));
+            }
+            osoba.OsobaId = id;
+
             if (ModelState.IsValid)
             {
                 _context.Add(osoba);
@@ -113,13 +132,13 @@ namespace Task1.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             var osoba = await _context.Osoby.FindAsync(id);
             if (osoba == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
             ViewData["SamochodId"] = new SelectList(_context.Samochody, "SamochodId", "SamochodId", osoba.SamochodId);
             return View(osoba);
@@ -134,7 +153,7 @@ namespace Task1.Controllers
         {
             if (id != osoba.OsobaId)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             if (ModelState.IsValid)
@@ -148,7 +167,7 @@ namespace Task1.Controllers
                 {
                     if (!OsobaExists(osoba.OsobaId))
                     {
-                        return NotFound();
+                        return View("NotFound");
                     }
                     else
                     {
@@ -166,7 +185,7 @@ namespace Task1.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             var osoba = await _context.Osoby
@@ -174,7 +193,7 @@ namespace Task1.Controllers
                 .FirstOrDefaultAsync(m => m.OsobaId == id);
             if (osoba == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return View(osoba);
@@ -185,6 +204,8 @@ namespace Task1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!OsobaExists(id))
+                return View("NotFound");
             var osoba = await _context.Osoby.FindAsync(id);
             _context.Osoby.Remove(osoba);
             await _context.SaveChangesAsync();
